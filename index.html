@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+<body>
+<h1>Phase Inverter Sample</h1>  
+<script>
+  const context = new AudioContext();
+
+  // Loads module script via AudioWorklet.
+  context.audioWorklet.addModule('processor.js').then(() => {
+    let oscillator = new OscillatorNode(context);
+    const panner =  context.createStereoPanner();
+
+    // After the resolution of module loading, an AudioWorkletNode can be
+    // constructed.
+    let phaseInverterNode = new AudioWorkletNode(context, 'phase-inverter');
+
+    // AudioWorkletNode can be interoperable with other native AudioNodes.
+    oscillator.connect(panner).connect(phaseInverterNode).connect(context.destination);
+    oscillator.start();
+  });
+</script>
+</body>
+</html>
